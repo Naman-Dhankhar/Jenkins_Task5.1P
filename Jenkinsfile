@@ -5,11 +5,11 @@ pipeline {
         DIRECTORY_PATH = 'https://github.com/Naman-Dhankhar/Jenkins_Task5.1P.git'
         TESTING_ENVIRONMENT = 'TestEnv'
         PRODUCTION_ENVIRONMENT = 'Naman'
-        EMAIL_RECIPIENTS = 'your-email@example.com'
+        EMAIL_RECIPIENTS = 'dhankharnaman8841@gmail.com'
     }
 
     triggers {
-        githubPush()
+        pollSCM('H/2 * * * *') // Polls GitHub every 1 minute
     }
 
     stages {
