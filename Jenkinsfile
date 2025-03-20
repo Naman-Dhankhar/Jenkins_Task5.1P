@@ -5,6 +5,11 @@ pipeline {
         DIRECTORY_PATH = 'https://github.com/Naman-Dhankhar/Jenkins_Task5.1P.git'
         TESTING_ENVIRONMENT = 'TestEnv'
         PRODUCTION_ENVIRONMENT = 'Naman'
+        EMAIL_RECIPIENTS = 'your-email@example.com'
+    }
+
+    triggers {
+        githubPush()
     }
 
     stages {
@@ -15,22 +20,48 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
                 echo "Running unit tests"
                 echo "Running integration tests"
             }
         }
 
-        stage('Code Quality Check') {
+        stage('Code Analysis') {
             steps {
                 echo "Checking the quality of the code"
             }
         }
 
-        stage('Deploy') {
+        stage('Security Scan') {
             steps {
-                echo "Deploying the application to testing environment: ${env.TESTING_ENVIRONMENT}"
+                echo "Performing security scan"
+            }
+            post {
+                always {
+                    emailext subject: "Security Scan Completed",
+                        body: "The security scan stage has completed. Please review the logs for details.",
+                        to: "${env.EMAIL_RECIPIENTS}"
+                }
+            }
+        }
+
+        stage('Deploy to Staging') {
+            steps {
+                echo "Deploying the application to staging environment: ${env.TESTING_ENVIRONMENT}"
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                echo "Running integration tests on staging environment"
+            }
+            post {
+                always {
+                    emailext subject: "Integration Tests Completed",
+                        body: "Integration tests on staging have completed. Please review the logs.",
+                        to: "${env.EMAIL_RECIPIENTS}"
+                }
             }
         }
 
