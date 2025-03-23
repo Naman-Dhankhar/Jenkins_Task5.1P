@@ -27,16 +27,6 @@ pipeline {
             steps {
                 sh(script: "echo Running tests... ")
             }
-            post {
-                always {
-                    emailext(
-                        subject: "Test Stage Result: ${currentBuild.currentResult}",
-                        to: "${env.EMAIL}",
-                        attachLog: true,
-                        body: "Test stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
-                    )
-                }
-            }
         }
 
         stage('Security Scan') {
@@ -55,9 +45,52 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Staging') {
             steps {
-                echo 'Deploying the project...'
+                echo 'Deploying the project to staging...'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Deployment to Staging Stage Result: ${currentBuild.currentResult}",
+                        to: "${env.EMAIL}",
+                        attachLog: true,
+                        body: "Deployment to staging stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                    )
+                }
+            }
+        }
+
+        stage('Approval for Production') {
+            steps {
+                echo 'Fetching approval for production deployment...'
+                sleep 10 // Simulating manual approval delay
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Approval for Production Stage Result: ${currentBuild.currentResult}",
+                        to: "${env.EMAIL}",
+                        attachLog: true,
+                        body: "Approval for production stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                    )
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploying the project to production...'
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Deployment to Production Stage Result: ${currentBuild.currentResult}",
+                        to: "${env.EMAIL}",
+                        attachLog: true,
+                        body: "Deployment to production stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                    )
+                }
             }
         }
     }
@@ -65,7 +98,7 @@ pipeline {
     post {
         always {
             emailext(
-                subject: "Final Stage Result: ${currentBuild.currentResult}",
+                subject: "Final Pipeline Result: ${currentBuild.currentResult}",
                 to: "${env.EMAIL}",
                 attachLog: true,
                 body: "The pipeline has completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
