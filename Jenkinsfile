@@ -31,6 +31,23 @@ pipeline {
             }
         }
 
+        stage('Code Analysis Check') {
+            steps {
+                echo 'Running code analysis... (Tools: SonarQube, ESLint, Pylint, Checkstyle)'
+                sh(script: "echo Running code analysis... ")
+            }
+            post {
+                always {
+                    emailext(
+                        subject: "Code Analysis Stage Result: ${currentBuild.currentResult}",
+                        to: "${env.EMAIL}",
+                        attachLog: true,
+                        body: "Code analysis stage completed with status: ${currentBuild.currentResult}.\nConsole log is attached."
+                    )
+                }
+            }
+        }
+
         stage('Security Scan') {
             steps {
                 echo 'Running security scan... (Tools: SonarQube, Snyk, OWASP Dependency Check)'
