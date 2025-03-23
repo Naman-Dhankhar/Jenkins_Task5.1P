@@ -13,24 +13,27 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
+                echo 'Checking out code from GitHub... (Tool: Git)'
                 git branch: 'main', url: "${GITHUB_REPO}"
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the project...'
+                echo 'Building the project... (Tools: Maven, Gradle, npm, Makefile)'
             }
         }
 
         stage('Test') {
             steps {
+                echo 'Running tests... (Tools: JUnit, Selenium, Jest, Mocha, PyTest)'
                 sh(script: "echo Running tests... ")
             }
         }
 
         stage('Security Scan') {
             steps {
+                echo 'Running security scan... (Tools: SonarQube, Snyk, OWASP Dependency Check)'
                 sh(script: "echo Running security scan... ")
             }
             post {
@@ -47,7 +50,7 @@ pipeline {
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying the project to staging...'
+                echo 'Deploying the project to staging... (Tools: Docker, Kubernetes, Helm, Ansible, AWS CodeDeploy)'
             }
             post {
                 always {
@@ -63,7 +66,7 @@ pipeline {
 
         stage('Approval for Production') {
             steps {
-                echo 'Fetching approval for production deployment...'
+                echo 'Fetching approval for production deployment... (Manual approval step using Jenkins input or ServiceNow integration)'
                 sleep 10 // Simulating manual approval delay
             }
             post {
@@ -80,7 +83,7 @@ pipeline {
 
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying the project to production...'
+                echo 'Deploying the project to production... (Tools: Kubernetes, Terraform, AWS CodeDeploy, Jenkins Pipelines)'
             }
             post {
                 always {
